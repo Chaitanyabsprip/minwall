@@ -1,0 +1,21 @@
+#! /bin/bash
+if [[ -z "$WALLPAPER_DIR" ]] || [[ $WALLPAPER_DIR -ne "" ]];
+then
+  WALLPAPER_DIR = $HOME/Pictures
+fi
+ln -sf $(find $WALLPAPER_DIR -type f \( -name "*.png" -or -name "*.jpg" -or -name "*.jpeg" \) | shuf -n1) $HOME/.wallpaper
+
+# uncomment the following line to dynamically change the lightdm greeter
+# wallpaper, NOTE: Must select the lightdm-bg background in the greeter settings
+# You will have to edit your sudoers file for this to work. Allow `cp` command
+# to work without password 
+#
+# sudo cp -f $(readlink $HOME/.wallpaper) /usr/share/backgrounds/lightdm-bg.png
+
+browser-sync reload -u http://localhost:8000 &
+
+# uncomment one the following line depending on your wallpaper setter
+nitrogen --set-scaled $HOME/.wallpaper
+# feh --bg-scale $HOME/.wallpaper
+# wal -i $HOME/.wallpaper
+

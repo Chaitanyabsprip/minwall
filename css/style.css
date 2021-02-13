@@ -1,0 +1,20 @@
+/* Load all CSS */
+@import url("base/normalize.css");
+@import url("base/font-face.css");
+@import url("base/base.css");
+@import url("base/dummy-body-background.css");
+
+/* Bars and Panels */
+@import url("bars/bar.css");
+@import url("bars/top-panel.css");
+@import url("bars/clock.css");
+@import url("bars/dock.css");
+@import url("bars/dock-buttons.css");
+
+/* Centered box and Contents */
+@import url("centeredbox/centered-box.css");
+@import url("centeredbox/centered-box-overlay.css");
+
+/* Screens */
+@import url("screens/screens.css");
+@import url("screens/web-menu.css");

@@ -1,0 +1,93 @@
+/* Dock buttons */
+.dockButton {
+  background: var(--base-container);
+  width: 40px;
+  height: 40px;
+  position: relative;
+  border-radius: var(--rounded-radius);
+  margin: 8px;
+  padding: 4px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+/* The a href container/main dock button container */
+.dockLink {
+  /* Act as div */
+  display: block;
+
+  /* Remove outlines */
+  text-decoration: none;
+  outline: 0;
+  border: none;
+  -moz-outline-style: none;
+
+  /* Disable dragging */
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.dockButton div {
+  background-size: cover;
+  width: 64px;
+  height: 64px;
+  border: none;
+
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: auto;
+}
+
+/* Dock button hover */
+.dockButton:hover {
+  background: none;
+  z-index: 8;
+
+  -ms-transform: scale(2);
+  -ms-transform-origin: center bottom;
+  -webkit-transform: scale(2);
+  -webkit-transform-origin: center bottom;
+  transform: scale(2);
+  transform-origin: center bottom;
+}
+
+.dockButton:hover a {
+  background: none;
+  z-index: 8;
+
+  -ms-transform: scale(2);
+  -ms-transform-origin: center bottom;
+  -webkit-transform: scale(2);
+  -webkit-transform-origin: center bottom;
+  transform: scale(2);
+  transform-origin: center bottom;
+}
+/* ul.osx-dock li.nearby {
+  margin-left: 6px;
+  margin-right: 6px;
+  z-index: 100;
+}
+
+ul.osx-dock li.nearby a {
+  -webkit-transform-origin: center bottom;
+  -webkit-transform: scale(1.25);
+} */
+/* Dock button active */
+.dockButton:active {
+  background: var(--base-active-bg);
+  -ms-transform: scale(2);
+  -webkit-transform: scale(2);
+  transform: scale(2);
+}
+
+/* Dock button image */
+.dockButtonImage {
+  background-size: cover;
+}
