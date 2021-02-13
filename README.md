@@ -4,7 +4,7 @@ This startpage focusses on minimalism and functionality.
 
 ## Screenshots
 
-![screenshot](screenshots/Screenshot:2021-02-13_001.png)
+![screenshot](screenshots/foxbg-min.gif)
 
 | Web Menu                           | Icon Hover                           |
 | ---                                | ---                                  |
@@ -31,4 +31,5 @@ Also add the startpage.sh to your autostart script.
   
 
 !!This is a fork of [manilarome's glorious-startpage](https://github.com/manilarome/the-glorious-startpage)
+
 I have debloated it and tried to make it minimal
