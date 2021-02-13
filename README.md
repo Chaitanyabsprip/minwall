@@ -31,6 +31,9 @@ Add the changeWallpaper file to path and prefereably bind the script to a key.
 
 Also add the startpage.sh to your autostart script.
   
+Best used with this [minimal firefox
+CSS](https://github.com/noib3/dotfiles/tree/macOS/firefox) or minimal browsers
+like surf or qutebrowser or luakit.
 
 !!This is a fork of [manilarome's glorious-startpage](https://github.com/manilarome/the-glorious-startpage)
 
