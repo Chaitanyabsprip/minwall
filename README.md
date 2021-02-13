@@ -26,7 +26,9 @@ If you want this on the newtab page (Firefox).
 * [New Tab Homepage](https://addons.mozilla.org/en-US/firefox/addon/new-tab-homepage/) 
 
 You can add or remove dock or web menu websites in the config.js file.
+
 Add the changeWallpaper file to path and prefereably bind the script to a key. 
+
 Also add the startpage.sh to your autostart script.
   
 
