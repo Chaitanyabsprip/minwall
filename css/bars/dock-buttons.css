@@ -69,16 +69,7 @@
   transform: scale(2);
   transform-origin: center bottom;
 }
-/* ul.osx-dock li.nearby {
-  margin-left: 6px;
-  margin-right: 6px;
-  z-index: 100;
-}
 
-ul.osx-dock li.nearby a {
-  -webkit-transform-origin: center bottom;
-  -webkit-transform: scale(1.25);
-} */
 /* Dock button active */
 .dockButton:active {
   background: var(--base-active-bg);
