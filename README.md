@@ -1,6 +1,6 @@
-## A minimal startpage
+## minWal
 
-This startpage focusses on minimalism and functionality.
+A startpage that focusses on minimalism and functionality.
 
 ## Screenshots
 
