@@ -234,6 +234,12 @@ class Config {
         url: "https://flaticon.com/",
         category: "design",
       },
+      {
+        site: "Whatsapp",
+        icon: "whatsapp",
+        url: "https://web.whatsapp.com/",
+        category: "social",
+      },
     ];
 
     return webSites;

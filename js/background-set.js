@@ -16,7 +16,7 @@ class BackgroundSet {
     elemStyle.background = urlStr;
     elemStyle.backgroundSize = "1920px 1080px";
     elemStyle.backgroundRepeat = "no-repeat";
-    elemStyle.backgroundPosition = "bottom left";
+    elemStyle.backgroundPosition = "bottom center";
     elemStyle.backgroundAttachment = "fixed";
   };
 
