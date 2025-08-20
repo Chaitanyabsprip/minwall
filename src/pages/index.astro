@@ -1,0 +1,68 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Overlay from "../components/Overlay.astro";
+import LaunchSVG from "../icons/launch.svg";
+import GitHubSVG from "../icons/github.svg";
+import GoogleSVG from "../icons/google.svg";
+import YoutubeSVG from "../icons/youtube.svg";
+import ChatGPTSVG from "../icons/chatgpt.svg";
+import { Icon } from "astro-icon/components";
+
+const currentTime = new Date().toLocaleTimeString("en-US", {
+  hour: "2-digit",
+  minute: "2-digit",
+  hour12: false,
+});
+---
+
+<Layout>
+  <div
+    x-data="{ showOverlay: false }"
+    x-init="$watch('showOverlay', value => { 
+      if (value) {
+        setTimeout(() => {
+          document.getElementById('overlay-search').focus();
+        }, 50); 
+      }
+    })"
+    @keydown.escape.window="if (showOverlay) { showOverlay = false }"
+    @keydown.space.window="if (!showOverlay) { showOverlay = true }"
+  >
+    <div
+      class="w-screen absolute z-2
+      flex mx-auto items-center justify-center
+      backdrop-blur-3xl text-white text-sm font-semibold
+      py-2"
+    >
+      {currentTime}
+    </div>
+    <Overlay />
+    <div
+      class="absolute bottom-0 left-1/2 -translate-1/2 z-2
+      backdrop-blur-3xl bg-white/6
+      flex flex-row items-center justify-center gap-4
+      rounded-4xl px-6 py-2"
+    >
+      <Icon
+        name="launch"
+        class="w-10 h-10 dock-item text-gray-700"
+        @click="showOverlay = !showOverlay"
+      />
+      <a href="https://reddit.com" aria-label="Reddit">
+        <Icon name="reddit" class="w-10 h-10 dock-item" /></a
+      >
+      <a href="https://github.com" aria-label="GitHub">
+        <Icon name="github" class="w-11 h-11 dock-item" /></a
+      >
+      <a href="https://google.com" aria-label="Google">
+        <Icon name="google" class="w-10 h-10 dock-item" /></a
+      >
+      <a href="https://youtube.com" aria-label="YouTube">
+        <Icon name="youtube" class="w-10 h-10 dock-item" /></a
+      >
+      <a href="https://chatgpt.com" aria-label="ChatGPT">
+        <Icon name="chatgpt" class="w-8 h-8 dock-item" /></a
+      >
+    </div>
+  </div>
+</Layout>

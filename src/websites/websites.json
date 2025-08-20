@@ -1,0 +1,230 @@
+[
+  {
+    "label": "Amazon",
+    "id": "amazon",
+    "url": "https://www.amazon.com/",
+    "icon": "amazon.svg"
+  },
+  {
+    "label": "Apple Music",
+    "id": "apple_music",
+    "url": "https://music.apple.com/",
+    "icon": "apple_music.svg"
+  },
+  {
+    "label": "Arch Wiki",
+    "id": "archwiki",
+    "url": "https://wiki.archlinux.org/",
+    "icon": "archwiki.svg"
+  },
+  {
+    "label": "Astro",
+    "id": "astro",
+    "url": "https://astro.build/",
+    "icon": "astro.svg"
+  },
+  {
+    "label": "Bitbucket",
+    "id": "bitbucket",
+    "url": "https://bitbucket.org/",
+    "icon": "bitbucket.svg"
+  },
+  {
+    "label": "Calendar",
+    "id": "calendar",
+    "url": "https://calendar.google.com/",
+    "icon": "calendar.svg"
+  },
+  {
+    "label": "ChatGPT",
+    "id": "chatgpt",
+    "url": "https://chat.openai.com/",
+    "icon": "chatgpt.svg"
+  },
+  {
+    "label": "Commons",
+    "id": "commons",
+    "url": "https://commons.wikimedia.org",
+    "icon": "commons.svg"
+  },
+  {
+    "label": "Diffchecker",
+    "id": "diffchecker",
+    "url": "https://www.diffchecker.com/",
+    "icon": "diffchecker.svg"
+  },
+  {
+    "label": "Discord",
+    "id": "discord",
+    "url": "https://discord.com/",
+    "icon": "discord.svg"
+  },
+  {
+    "label": "Docker Hub",
+    "id": "docker",
+    "url": "https://hub.docker.com/",
+    "icon": "docker.svg"
+  },
+  {
+    "label": "Google Docs",
+    "id": "docs",
+    "url": "https://docs.google.com/document/",
+    "icon": "docs.svg"
+  },
+  {
+    "label": "Google Drive",
+    "id": "drive",
+    "url": "https://drive.google.com/document/",
+    "icon": "drive.svg"
+  },
+  {
+    "label": "DuckDuckGo",
+    "id": "duckduckgo",
+    "url": "https://duckduckgo.com/",
+    "icon": "duckduckgo.svg"
+  },
+  {
+    "label": "Figma",
+    "id": "figma",
+    "url": "https://www.figma.com/",
+    "icon": "figma.svg"
+  },
+  {
+    "label": "Flaticon",
+    "id": "flaticon",
+    "url": "https://www.flaticon.com/",
+    "icon": "flaticon.svg"
+  },
+  {
+    "label": "Gemini",
+    "id": "gemini",
+    "url": "https://gemini.google.com/",
+    "icon": "gemini.svg"
+  },
+  {
+    "label": "GitHub",
+    "id": "github",
+    "url": "https://github.com/",
+    "icon": "github.svg"
+  },
+  {
+    "label": "GitLab",
+    "id": "gitlab",
+    "url": "https://gitlab.com/",
+    "icon": "gitlab.svg"
+  },
+  {
+    "label": "Gmail",
+    "id": "gmail",
+    "url": "https://mail.google.com/",
+    "icon": "gmail.svg"
+  },
+  {
+    "label": "Google",
+    "id": "google",
+    "url": "https://www.google.com/",
+    "icon": "google.svg"
+  },
+  {
+    "label": "Hotstar",
+    "id": "hotstar",
+    "url": "https://www.hotstar.com/",
+    "icon": "hotstar.svg"
+  },
+  {
+    "label": "Icons8",
+    "id": "icons8",
+    "url": "https://icons8.com/",
+    "icon": "icons8.svg"
+  },
+  {
+    "label": "JSON Diff",
+    "id": "jsondiff",
+    "url": "https://www.debugbear.com/json-size-diff",
+    "icon": "jsondiff.svg"
+  },
+  {
+    "label": "Material.io",
+    "id": "materialio",
+    "url": "https://material.io/",
+    "icon": "materialio.svg"
+  },
+  {
+    "label": "Monkeytype",
+    "id": "monkeytype",
+    "url": "https://monkeytype.com/",
+    "icon": "monkeytype.svg"
+  },
+  {
+    "label": "Netflix",
+    "id": "netflix",
+    "url": "https://www.netflix.com/",
+    "icon": "netflix.svg"
+  },
+  {
+    "label": "Perplexity",
+    "id": "perplexity",
+    "url": "https://www.perplexity.ai/",
+    "icon": "perplexity.svg"
+  },
+  {
+    "label": "Pub.dev",
+    "id": "pubdev",
+    "url": "https://pub.dev/",
+    "icon": "pubdev.svg"
+  },
+  {
+    "label": "Reddit",
+    "id": "reddit",
+    "url": "https://www.reddit.com/",
+    "icon": "reddit.svg"
+  },
+  {
+    "label": "Google Sheets",
+    "id": "sheets",
+    "url": "https://sheets.google.com",
+    "icon": "sheets.svg"
+  },
+  {
+    "label": "Slack",
+    "id": "slack",
+    "url": "https://slack.com/",
+    "icon": "slack.svg"
+  },
+  {
+    "label": "Spotify",
+    "id": "spotify",
+    "url": "https://open.spotify.com/",
+    "icon": "spotify.svg"
+  },
+  {
+    "label": "Tailwind CSS",
+    "id": "tailwindcss",
+    "url": "https://tailwindcss.com/",
+    "icon": "tailwindcss.svg"
+  },
+  {
+    "label": "Twitch",
+    "id": "twitch",
+    "url": "https://www.twitch.tv/",
+    "icon": "twitch.svg"
+  },
+  {
+    "label": "Unsplash",
+    "id": "unsplash",
+    "url": "https://unsplash.com/",
+    "icon": "unsplash.svg"
+  },
+  {
+    "label": "YouTube",
+    "id": "youtube",
+    "url": "https://www.youtube.com/",
+    "icon": "youtube.svg"
+  },
+  {
+    "label": "YouTube Music",
+    "id": "youtube_music",
+    "url": "https://music.youtube.com/",
+    "icon": "youtube_music.svg"
+  }
+]

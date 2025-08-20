@@ -1,0 +1,250 @@
+---
+import { Icon } from "astro-icon/components";
+import { getCollection } from "astro:content";
+import OverlayItem from "./OverlayItem.astro";
+
+const websites = await getCollection("websites");
+---
+
+<div
+  class="inset-0 w-screen h-screen
+    backdrop-blur-xl bg-gray-500/10
+    pt-8 pb-28 overflow-hidden
+    absolute z-1"
+  x-show="showOverlay"
+  x-transition:enter="transition ease-out duration-300 backdrop-blur-3xl"
+  x-transition:enter-start="opacity-0"
+  x-transition:enter-end="opacity-100"
+  x-transition:leave="transition ease-out duration-300 backdrop-blur-3xl"
+  x-transition:leave-start="opacity-100"
+  x-transition:leave-end="opacity-0"
+>
+  <script is:inline>
+    const classes = ["bg-white/6", "border", "border-2", "border-gray-800"];
+    let sortedItems = [];
+    let lastMatchedItem;
+
+    function inputChanged(value) {
+      if (lastMatchedItem)
+        classes.forEach((cls) => {
+          lastMatchedItem.classList.remove(cls);
+        });
+
+      populateItems();
+      const searchQuery = value.toLowerCase();
+      if (searchQuery === "") return;
+
+      const match = findMatchAndCount(searchQuery, sortedItems);
+      lastMatchedItem = match.item;
+      if (match.count === 1) match.item.click();
+      if (!lastMatchedItem) return;
+
+      classes.forEach((cls) => {
+        lastMatchedItem.classList.add(cls);
+      });
+      lastMatchedItem.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+
+    function followMatchedLink() {
+      if (lastMatchedItem) lastMatchedItem.click();
+    }
+
+    function findMatchAndCount(searchQuery, items) {
+      let count = 0;
+      let matchedItem;
+      for (const item of items) {
+        if (item.id.toLowerCase().startsWith(searchQuery)) {
+          if (!matchedItem) matchedItem = item;
+          count++;
+        }
+      }
+      return { item: matchedItem, count };
+    }
+
+    function populateItems() {
+      if (sortedItems.length > 0) return;
+      const items = document.querySelectorAll("#website-grid a");
+      sortedItems = Array.from(items).sort((a, b) => a.id.localeCompare(b.id));
+    }
+  </script>
+  <script is:inline>
+    function imageUploader() {
+      return {
+        handleImageUpload(event) {
+          const file = event.target.files[0];
+          if (!file) return;
+
+          // Check if file is an image
+          if (!file.type.startsWith("image/")) {
+            alert("Please select an image file");
+            return;
+          }
+
+          // Check file size (max 5MB)
+          if (file.size > 5 * 1024 * 1024) {
+            alert("Image size should be less than 5MB");
+            return;
+          }
+
+          const reader = new FileReader();
+
+          reader.onload = (e) => {
+            if (!e.target) return;
+            const imageData = e.target.result;
+            this.saveImageToIndexedDB(imageData);
+          };
+
+          reader.readAsDataURL(file);
+        },
+
+        saveImageToIndexedDB(imageData) {
+          const request = indexedDB.open("backgroundImageDB", 1);
+
+          request.onupgradeneeded = (event) => {
+            const db = event.target.result;
+
+            if (!db.objectStoreNames.contains("images")) {
+              db.createObjectStore("images", { keyPath: "id" });
+            }
+          };
+
+          request.onsuccess = (event) => {
+            const db = event.target.result;
+            const transaction = db.transaction(["images"], "readwrite");
+            const store = transaction.objectStore("images");
+
+            // Store the image data
+            const imageRecord = {
+              id: "userBackground",
+              data: imageData,
+              timestamp: new Date().getTime(),
+            };
+
+            const saveRequest = store.put(imageRecord);
+
+            saveRequest.onsuccess = () => {
+              window.location.reload();
+            };
+
+            saveRequest.onerror = () => {
+              alert("Failed to save background image");
+            };
+
+            transaction.oncomplete = () => {
+              db.close();
+            };
+          };
+
+          request.onerror = (event) => {
+            alert("Error opening database: " + event.target.errorCode);
+          };
+        },
+
+        resetBackground() {
+          const request = indexedDB.open("backgroundImageDB", 1);
+
+          request.onsuccess = (event) => {
+            const db = event.target.result;
+
+            // Check if the object store exists
+            if (db.objectStoreNames.contains("images")) {
+              const transaction = db.transaction(["images"], "readwrite");
+              const store = transaction.objectStore("images");
+
+              // Delete the custom background entry
+              const deleteRequest = store.delete("userBackground");
+
+              deleteRequest.onsuccess = () => {
+                window.location.reload();
+              };
+
+              deleteRequest.onerror = () => {
+                alert("Failed to reset background");
+              };
+
+              transaction.oncomplete = () => {
+                db.close();
+              };
+            } else {
+              alert("No custom background found");
+            }
+          };
+
+          request.onerror = (event) => {
+            alert("Error accessing database");
+          };
+        },
+      };
+    }
+  </script>
+  <div class="w-full flex justify-center m-4">
+    <input
+      id="overlay-search"
+      x-ref="overlay-search"
+      type="text"
+      placeholder="Search..."
+      class="px-4 py-2 mb-2
+      rounded-2xl bg-gray-950/50 text-gray-500
+      focus:outline-none focus:ring-2 focus:ring-gray-800
+      w-1/4"
+      autocomplete="off"
+      @input="inputChanged($event.target.value)"
+      @keydown.enter="followMatchedLink()"
+      @blur="setTimeout(() => {showOverlay = false}, 50)"
+    />
+  </div>
+  <div
+    id="website-grid"
+    class="grid grid-cols-8 items-start
+    mx-auto w-full h-full max-h-[78vh]
+    overflow-auto px-56
+     scrollbar-thin scrollbar-thumb-gray-900 scrollbar-thumb-rounded-full"
+  >
+    {
+      websites.map((website) => (
+        <OverlayItem
+          label={website.data.label}
+          url={website.data.url}
+          id={website.data.id}
+        >
+          <Icon name={website.data.id} class="w-16 h-16" />
+        </OverlayItem>
+      ))
+    }
+  </div>
+
+  <!-- Background Image Controls -->
+  <div
+    class="absolute bottom-4 right-4 flex gap-3 opacity-10"
+    x-data="imageUploader()"
+  >
+    <!-- Reset Button -->
+    <button
+      class="bg-gray-800/95 hover:bg-gray-700/95 text-white rounded-full p-3 backdrop-blur-md transition-colors"
+      @click="resetBackground()"
+      aria-label="Reset to default background"
+      title="Reset to default background"
+    >
+      <Icon name="reload" class="w-4 h-4" />
+    </button>
+
+    <!-- Upload Button -->
+    <button
+      class="bg-gray-800/95 hover:bg-gray-700/95 text-white rounded-full p-3 backdrop-blur-md transition-colors"
+      @click="$refs.fileInput.click()"
+      aria-label="Upload background image"
+      title="Upload custom background"
+    >
+      <Icon name="upload" class="w-4 h-4" />
+    </button>
+
+    <input
+      type="file"
+      accept="image/*"
+      class="hidden"
+      id="background-image-upload"
+      @change="handleImageUpload($event)"
+      x-ref="fileInput"
+    />
+  </div>
+</div>
