@@ -1,11 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Overlay from "../components/Overlay.astro";
-import LaunchSVG from "../icons/launch.svg";
-import GitHubSVG from "../icons/github.svg";
-import GoogleSVG from "../icons/google.svg";
-import YoutubeSVG from "../icons/youtube.svg";
-import ChatGPTSVG from "../icons/chatgpt.svg";
 import { Icon } from "astro-icon/components";
 
 const currentTime = new Date().toLocaleTimeString("en-US", {
@@ -17,16 +12,9 @@ const currentTime = new Date().toLocaleTimeString("en-US", {
 
 <Layout>
   <div
-    x-data="{ showOverlay: false }"
-    x-init="$watch('showOverlay', value => { 
-      if (value) {
-        setTimeout(() => {
-          document.getElementById('overlay-search').focus();
-        }, 50); 
-      }
-    })"
-    @keydown.escape.window="if (showOverlay) { showOverlay = false }"
-    @keydown.space.window="if (!showOverlay) { showOverlay = true }"
+    x-data
+    @keydown.escape.window="if ($store.overlay.show) { $store.overlay.show = false }"
+    @keydown.space.window="if (!$store.overlay.show) { $store.overlay.show = true }"
   >
     <div
       class="w-screen absolute z-2
@@ -46,23 +34,23 @@ const currentTime = new Date().toLocaleTimeString("en-US", {
       <Icon
         name="launch"
         class="w-10 h-10 dock-item text-gray-700"
-        @click="showOverlay = !showOverlay"
+        @click="$store.overlay.show = !$store.overlay.show"
       />
       <a href="https://reddit.com" aria-label="Reddit">
-        <Icon name="reddit" class="w-10 h-10 dock-item" /></a
-      >
+        <Icon name="reddit" class="w-10 h-10 dock-item" />
+      </a>
       <a href="https://github.com" aria-label="GitHub">
-        <Icon name="github" class="w-11 h-11 dock-item" /></a
-      >
+        <Icon name="github" class="w-11 h-11 dock-item" />
+      </a>
       <a href="https://google.com" aria-label="Google">
-        <Icon name="google" class="w-10 h-10 dock-item" /></a
-      >
+        <Icon name="google" class="w-10 h-10 dock-item" />
+      </a>
       <a href="https://youtube.com" aria-label="YouTube">
-        <Icon name="youtube" class="w-10 h-10 dock-item" /></a
-      >
+        <Icon name="youtube" class="w-10 h-10 dock-item" />
+      </a>
       <a href="https://chatgpt.com" aria-label="ChatGPT">
-        <Icon name="chatgpt" class="w-8 h-8 dock-item" /></a
-      >
+        <Icon name="chatgpt" class="w-8 h-8 dock-item" />
+      </a>
     </div>
   </div>
 </Layout>

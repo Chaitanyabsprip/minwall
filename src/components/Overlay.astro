@@ -11,7 +11,7 @@ const websites = await getCollection("websites");
     backdrop-blur-xl bg-gray-500/10
     pt-8 pb-28 overflow-hidden
     absolute z-1"
-  x-show="showOverlay"
+  x-show="$store.overlay.show"
   x-transition:enter="transition ease-out duration-300 backdrop-blur-3xl"
   x-transition:enter-start="opacity-0"
   x-transition:enter-end="opacity-100"
@@ -19,54 +19,6 @@ const websites = await getCollection("websites");
   x-transition:leave-start="opacity-100"
   x-transition:leave-end="opacity-0"
 >
-  <script is:inline>
-    const classes = ["bg-white/6", "border", "border-2", "border-gray-800"];
-    let sortedItems = [];
-    let lastMatchedItem;
-
-    function inputChanged(value) {
-      if (lastMatchedItem)
-        classes.forEach((cls) => {
-          lastMatchedItem.classList.remove(cls);
-        });
-
-      populateItems();
-      const searchQuery = value.toLowerCase();
-      if (searchQuery === "") return;
-
-      const match = findMatchAndCount(searchQuery, sortedItems);
-      lastMatchedItem = match.item;
-      if (match.count === 1) match.item.click();
-      if (!lastMatchedItem) return;
-
-      classes.forEach((cls) => {
-        lastMatchedItem.classList.add(cls);
-      });
-      lastMatchedItem.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
-
-    function followMatchedLink() {
-      if (lastMatchedItem) lastMatchedItem.click();
-    }
-
-    function findMatchAndCount(searchQuery, items) {
-      let count = 0;
-      let matchedItem;
-      for (const item of items) {
-        if (item.id.toLowerCase().startsWith(searchQuery)) {
-          if (!matchedItem) matchedItem = item;
-          count++;
-        }
-      }
-      return { item: matchedItem, count };
-    }
-
-    function populateItems() {
-      if (sortedItems.length > 0) return;
-      const items = document.querySelectorAll("#website-grid a");
-      sortedItems = Array.from(items).sort((a, b) => a.id.localeCompare(b.id));
-    }
-  </script>
   <script is:inline>
     function imageUploader() {
       return {
@@ -188,13 +140,13 @@ const websites = await getCollection("websites");
       focus:outline-none focus:ring-2 focus:ring-gray-800
       w-1/4"
       autocomplete="off"
-      @input="inputChanged($event.target.value)"
+      @input="$store.overlay.search($event.target.value)"
       @keydown.enter="followMatchedLink()"
-      @blur="setTimeout(() => {showOverlay = false}, 50)"
+      @blur="setTimeout(() => {$store.overlay.show = false}, 50)"
     />
   </div>
   <div
-    id="website-grid"
+    x-init="$store.overlay.findItems($el)"
     class="grid grid-cols-8 items-start
     mx-auto w-full h-full max-h-[78vh]
     overflow-auto px-56
