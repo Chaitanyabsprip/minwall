@@ -165,12 +165,10 @@ const websites = await getCollection("websites");
     }
   </div>
 
-  <!-- Background Image Controls -->
   <div
     class="absolute bottom-4 right-4 flex gap-3 opacity-10"
     x-data="imageUploader()"
   >
-    <!-- Reset Button -->
     <button
       class="bg-gray-800/95 hover:bg-gray-700/95 text-white rounded-full p-3 backdrop-blur-md transition-colors"
       @click="resetBackground()"
@@ -180,7 +178,6 @@ const websites = await getCollection("websites");
       <Icon name="reload" class="w-4 h-4" />
     </button>
 
-    <!-- Upload Button -->
     <button
       class="bg-gray-800/95 hover:bg-gray-700/95 text-white rounded-full p-3 backdrop-blur-md transition-colors"
       @click="$refs.fileInput.click()"

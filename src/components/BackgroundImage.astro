@@ -15,6 +15,7 @@ import backgroundHigh from "../assets/background.webp";
     alt="backgroundHigh"
     class="object-cover w-full h-full absolute inset-0 transition-opacity duration-1000"
     id="default-background"
+    x-init="if ($el.complete) { loaded = true; }"
     @load="loaded = true"
     :class="{ 'opacity-100': loaded, 'opacity-0': !loaded }"
   />
