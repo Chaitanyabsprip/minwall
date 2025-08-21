@@ -4,17 +4,20 @@ import backgroundLow from "../assets/background-low.webp";
 import backgroundHigh from "../assets/background.webp";
 ---
 
-<div class="z-0 absolute inset-0 overflow-hidden">
-  <!-- Default background image -->
+<div
+  class="z-0 absolute inset-0 overflow-hidden"
+  x-data="{ loaded: false }"
+  style={`background-image: url('${backgroundLow.src}'); background-size: cover; background-position: center;`}
+>
   <Picture
     src={backgroundHigh}
     formats={["avif", "webp"]}
     alt="backgroundHigh"
     class="object-cover w-full h-full absolute inset-0 transition-opacity duration-1000"
     id="default-background"
+    @load="loaded = true"
+    :class="{ 'opacity-100': loaded, 'opacity-0': !loaded }"
   />
-  
-  <!-- Custom background image (will be shown via JS if available) -->
   <img
     src=""
     alt="Custom background"
@@ -25,49 +28,49 @@ import backgroundHigh from "../assets/background.webp";
 
 <script>
   // Check for custom background in IndexedDB on page load
-  document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener("DOMContentLoaded", function () {
     loadCustomBackgroundImage();
   });
-  
+
   function loadCustomBackgroundImage() {
-    const request = indexedDB.open('backgroundImageDB', 1);
-    
+    const request = indexedDB.open("backgroundImageDB", 1);
+
     request.onupgradeneeded = (event) => {
       const db = event.target.result;
-      
-      if (!db.objectStoreNames.contains('images')) {
-        db.createObjectStore('images', { keyPath: 'id' });
+
+      if (!db.objectStoreNames.contains("images")) {
+        db.createObjectStore("images", { keyPath: "id" });
       }
     };
-    
+
     request.onsuccess = (event) => {
       const db = event.target.result;
-      const transaction = db.transaction(['images'], 'readonly');
-      const store = transaction.objectStore('images');
-      
-      const getRequest = store.get('userBackground');
-      
+      const transaction = db.transaction(["images"], "readonly");
+      const store = transaction.objectStore("images");
+
+      const getRequest = store.get("userBackground");
+
       getRequest.onsuccess = () => {
         const imageRecord = getRequest.result;
-        
+
         if (imageRecord && imageRecord.data) {
           // Found a custom background image in the database
-          const customBg = document.getElementById('custom-background');
-          const defaultBg = document.getElementById('default-background');
-          
+          const customBg = document.getElementById("custom-background");
+          const defaultBg = document.getElementById("default-background");
+
           if (customBg && defaultBg) {
             // Set the custom background image
             customBg.src = imageRecord.data;
-            
+
             // Once the custom image is loaded, show it and hide the default
             customBg.onload = () => {
-              customBg.classList.remove('opacity-0');
-              defaultBg.classList.add('opacity-0');
+              customBg.classList.remove("opacity-0");
+              defaultBg.classList.add("opacity-0");
             };
           }
         }
       };
-      
+
       transaction.oncomplete = () => {
         db.close();
       };
