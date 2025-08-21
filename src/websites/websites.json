@@ -1,5 +1,11 @@
 [
   {
+    "label": "Alpine.js",
+    "id": "alpinejs",
+    "url": "https://alpinejs.dev/",
+    "icon": "alpinejs.svg"
+  },
+  {
     "label": "Amazon",
     "id": "amazon",
     "url": "https://www.amazon.com/",
