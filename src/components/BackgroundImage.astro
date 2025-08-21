@@ -16,6 +16,7 @@ import backgroundHigh from "../assets/background.webp";
     class="object-cover w-full h-full absolute inset-0 transition-opacity duration-1000"
     id="default-background"
     x-init="if ($el.complete) { loaded = true; }"
+    x-show="!$store.image.isCustomBackgroundSet"
     @load="loaded = true"
     :class="{ 'opacity-100': loaded, 'opacity-0': !loaded }"
   />
@@ -23,58 +24,9 @@ import backgroundHigh from "../assets/background.webp";
     src=""
     alt="Custom background"
     class="object-cover w-full h-full absolute inset-0 transition-opacity duration-1000 opacity-0"
+    x-init="$store.image.loadCustomBackgroundImage(); if ($el.complete) { loaded = true; }"
+    x-show="$store.image.isCustomBackgroundSet"
+    @load="loaded = true"
     id="custom-background"
   />
 </div>
-
-<script>
-  // Check for custom background in IndexedDB on page load
-  document.addEventListener("DOMContentLoaded", function () {
-    loadCustomBackgroundImage();
-  });
-
-  function loadCustomBackgroundImage() {
-    const request = indexedDB.open("backgroundImageDB", 1);
-
-    request.onupgradeneeded = (event) => {
-      const db = event.target.result;
-
-      if (!db.objectStoreNames.contains("images")) {
-        db.createObjectStore("images", { keyPath: "id" });
-      }
-    };
-
-    request.onsuccess = (event) => {
-      const db = event.target.result;
-      const transaction = db.transaction(["images"], "readonly");
-      const store = transaction.objectStore("images");
-
-      const getRequest = store.get("userBackground");
-
-      getRequest.onsuccess = () => {
-        const imageRecord = getRequest.result;
-
-        if (imageRecord && imageRecord.data) {
-          // Found a custom background image in the database
-          const customBg = document.getElementById("custom-background");
-          const defaultBg = document.getElementById("default-background");
-
-          if (customBg && defaultBg) {
-            // Set the custom background image
-            customBg.src = imageRecord.data;
-
-            // Once the custom image is loaded, show it and hide the default
-            customBg.onload = () => {
-              customBg.classList.remove("opacity-0");
-              defaultBg.classList.add("opacity-0");
-            };
-          }
-        }
-      };
-
-      transaction.oncomplete = () => {
-        db.close();
-      };
-    };
-  }
-</script>
