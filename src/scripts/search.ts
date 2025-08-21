@@ -15,7 +15,7 @@ export default {
   show: false,
   items: [],
   selectedItem: null,
-  init(this: OverlayStore) {
+  init() {
     let prev: boolean = false;
     Alpine.effect(() => {
       const overlay = Alpine.store("overlay") as OverlayStore;
@@ -27,25 +27,25 @@ export default {
       }
     });
   },
-  select(this: OverlayStore) {
+  select() {
     this.selectedItem?.click();
   },
-  search(this: OverlayStore, query: string) {
-    if (this.selectedItem) this.selectedItem?.classList.remove(...classes);
+  search(query: string) {
+    if (this.selectedItem) this.selectedItem.classList.remove(...classes);
     if (!this.show || !this.items || !query) return;
     const matches = this.items.filter((item) => item.id.startsWith(query));
     if (matches.length === 0) return;
     this.selectedItem = matches[0];
-    this.selectedItem?.classList.add(...classes);
-    this.selectedItem?.scrollIntoView({
+    this.selectedItem.classList.add(...classes);
+    this.selectedItem.scrollIntoView({
       behavior: "smooth",
       block: "center",
     });
-    if (matches.length === 1) return this.selectedItem?.click();
+    if (matches.length === 1) return this.selectedItem.click();
   },
-  findItems(this: OverlayStore, element: HTMLElement) {
+  findItems(element: HTMLElement) {
     this.items = Array.from(element.querySelectorAll("a")).sort((a, b) =>
       a.id.localeCompare(b.id),
     );
   },
-};
+} as OverlayStore;
