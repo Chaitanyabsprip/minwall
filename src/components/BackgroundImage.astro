@@ -2,12 +2,34 @@
 import { Picture } from "astro:assets";
 import backgroundLow from "../assets/background-low.webp";
 import backgroundHigh from "../assets/background.webp";
+
+// Get the URL string for the low-res background
+const backgroundLowSrc = backgroundLow.src;
 ---
+
+<script define:vars={{ backgroundLowSrc }}>
+  document.addEventListener('alpine:init', () => {
+    Alpine.data('backgroundImageData', () => ({
+      loaded: false,
+      blurSrc: '',
+      defaultLowResSrc: backgroundLowSrc,
+      init() {
+        if (this.$store.image.isCustomBackgroundSet) {
+          this.$store.image.getBlurredImageUrl().then(url => {
+            if (url) {
+              this.blurSrc = url;
+            }
+          });
+        }
+      }
+    }));
+  });
+</script>
 
 <div
   class="z-0 absolute inset-0 overflow-hidden"
-  x-data="{ loaded: false }"
-  style={`background-image: url('${backgroundLow.src}'); background-size: cover; background-position: center;`}
+  x-data="backgroundImageData"
+  :style="blurSrc ? `background-image: url('${blurSrc}'); background-size: cover; background-position: center;` : `background-image: url('${defaultLowResSrc}'); background-size: cover; background-position: center;`"
 >
   <Picture
     src={backgroundHigh}

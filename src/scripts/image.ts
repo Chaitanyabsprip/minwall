@@ -1,6 +1,7 @@
 interface ImageRecord {
   id: string;
   data: string | ArrayBuffer | null;
+  blurData?: string | ArrayBuffer | null;
   timestamp: number;
 }
 
@@ -13,6 +14,7 @@ interface ImageStore {
   saveImageToIndexedDB(imageData: string | ArrayBuffer | null): void;
   resetBackground(): void;
   loadCustomBackgroundImage(): void;
+  getBlurredImageUrl(): Promise<string | null>;
 }
 
 // Constants
@@ -137,9 +139,107 @@ function readImageFile(file: File): Promise<string> {
   });
 }
 
+function createLowResBlurredImage(imageData: string): Promise<string> {
+  return new Promise<string>((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      try {
+        // Create a small canvas for the low-res version
+        const canvas = document.createElement("canvas");
+        // Target an extremely low resolution for better compression
+        const MAX_SIZE = 12; // Reduced from 20 to minimize size
+        const scale = Math.min(MAX_SIZE / img.width, MAX_SIZE / img.height);
+        canvas.width = Math.floor(img.width * scale);
+        canvas.height = Math.floor(img.height * scale);
+
+        const ctx = canvas.getContext("2d");
+        if (!ctx) {
+          reject(new Error("Failed to get canvas context"));
+          return;
+        }
+
+        // Draw the image at a lower resolution
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+        // Apply Gaussian-like blur effect
+        // This is a simple implementation that approximates a Gaussian blur
+        const blurAmount = 2;
+        for (let i = 0; i < blurAmount; i++) {
+          ctx.globalAlpha = 0.5;
+          // Horizontal blur
+          ctx.drawImage(
+            canvas,
+            1,
+            0,
+            canvas.width - 2,
+            canvas.height,
+            0,
+            0,
+            canvas.width,
+            canvas.height,
+          );
+          // Vertical blur
+          ctx.drawImage(
+            canvas,
+            0,
+            1,
+            canvas.width,
+            canvas.height - 2,
+            0,
+            0,
+            canvas.width,
+            canvas.height,
+          );
+          ctx.globalAlpha = 1.0;
+        }
+
+        // Check WebP support
+        const isWebPSupported =
+          canvas.toDataURL("image/webp").indexOf("data:image/webp") === 0;
+
+        // Convert to data URL with optimal format
+        let blurredDataUrl;
+        if (isWebPSupported) {
+          // WebP offers better compression for the same visual quality
+          blurredDataUrl = canvas.toDataURL("image/webp", 0.4);
+        } else {
+          // Fallback to JPEG with lower quality since it's just a placeholder
+          blurredDataUrl = canvas.toDataURL("image/jpeg", 0.3);
+        }
+
+        resolve(blurredDataUrl);
+      } catch (error) {
+        reject(error instanceof Error ? error : new Error(String(error)));
+      }
+    };
+
+    img.onerror = () => {
+      reject(new Error("Failed to load image for processing"));
+    };
+
+    img.src = imageData;
+  });
+}
+
 // Main export
 const imageStore: ImageStore = {
   isCustomBackgroundSet: false,
+
+  getBlurredImageUrl(): Promise<string | null> {
+    return new Promise<string | null>((resolve) => {
+      getUserBackgroundImage()
+        .then((imageRecord) => {
+          if (imageRecord?.blurData) {
+            resolve(imageRecord.blurData.toString());
+          } else {
+            resolve(null);
+          }
+        })
+        .catch(() => {
+          resolve(null);
+        });
+    });
+  },
 
   init(): void {
     openDatabase()
@@ -187,32 +287,42 @@ const imageStore: ImageStore = {
   },
 
   saveImageToIndexedDB(imageData: string | ArrayBuffer | null): void {
-    if (!imageData) {
-      alert("No image data to save");
+    if (!imageData || typeof imageData !== "string") {
+      alert("No valid image data to save");
       return;
     }
 
-    executeTransaction("readwrite", (store) => {
-      const imageRecord: ImageRecord = {
-        id: BG_KEY,
-        data: imageData,
-        timestamp: Date.now(),
-      };
+    // Create a low-resolution blurred version
+    createLowResBlurredImage(imageData)
+      .then((blurData) => {
+        executeTransaction("readwrite", (store) => {
+          const imageRecord: ImageRecord = {
+            id: BG_KEY,
+            data: imageData,
+            blurData: blurData,
+            timestamp: Date.now(),
+          };
 
-      const saveRequest = store.put(imageRecord);
+          const saveRequest = store.put(imageRecord);
 
-      saveRequest.onsuccess = () => {
-        window.location.reload();
-      };
+          saveRequest.onsuccess = () => {
+            window.location.reload();
+          };
 
-      saveRequest.onerror = () => {
-        alert("Failed to save background image");
-      };
-    }).catch((error) => {
-      alert(
-        `Error saving image: ${error instanceof Error ? error.message : String(error)}`,
-      );
-    });
+          saveRequest.onerror = () => {
+            alert("Failed to save background image");
+          };
+        }).catch((error) => {
+          alert(
+            `Error saving image: ${error instanceof Error ? error.message : String(error)}`,
+          );
+        });
+      })
+      .catch((error) => {
+        alert(
+          `Error creating blurred image: ${error instanceof Error ? error.message : String(error)}`,
+        );
+      });
   },
 
   resetBackground(): void {
@@ -255,6 +365,18 @@ const imageStore: ImageStore = {
           ) as HTMLImageElement | null;
           const defaultBg = document.getElementById("default-background");
           if (customBg && defaultBg) {
+            // If we have blurred data, use it for the background first
+            if (imageRecord.blurData) {
+              // Set the blurred image as background
+              const container = customBg.parentElement;
+              if (container) {
+                container.style.backgroundImage = `url('${imageRecord.blurData.toString()}')`;
+                container.style.backgroundSize = "cover";
+                container.style.backgroundPosition = "center";
+              }
+            }
+
+            // Load the high-res image
             customBg.src = imageRecord.data.toString();
             customBg.onload = () => {
               customBg.classList.remove("opacity-0");
