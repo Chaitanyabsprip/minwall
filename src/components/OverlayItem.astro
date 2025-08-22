@@ -9,11 +9,11 @@ const { label, url, id } = Astro.props;
 
 <a
   href={url ?? "#"}
-  id={id}
+  {id}
   class="flex flex-col items-center justify-center gap-4
         hover:bg-white/6 rounded-3xl py-4 px-2 mx-2 my-4
         transition-all duration-150"
 >
   <slot />
-  <p class="text-sm font-bold text-gray-50">{label}</p>
+  <p class="text-sm font-bold text-gray-50 text-center">{label}</p>
 </a>

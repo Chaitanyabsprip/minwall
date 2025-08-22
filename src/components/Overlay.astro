@@ -28,7 +28,7 @@ const websites = await getCollection("websites");
       class="px-4 py-2 mb-2
       rounded-2xl bg-gray-950/50 text-gray-500
       focus:outline-none focus:ring-2 focus:ring-gray-800
-      w-1/4"
+      w-1/4 min-w-[240px]"
       autocomplete="off"
       @input="$store.overlay.search($event.target.value)"
       @keydown.enter="followMatchedLink()"
@@ -37,9 +37,9 @@ const websites = await getCollection("websites");
   </div>
   <div
     x-init="$store.overlay.findItems($el)"
-    class="grid grid-cols-8 items-start
-    mx-auto w-full h-full max-h-[78vh]
-    overflow-auto px-56
+    class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-8 items-start
+    mx-auto w-full h-full max-h-[calc(100vh-17rem)] lg:max-h-[calc(100vh-14rem)]
+    overflow-auto px-12 sm:px-32 lg:px-56
      scrollbar-thin scrollbar-thumb-gray-900 scrollbar-thumb-rounded-full"
   >
     {
@@ -49,7 +49,7 @@ const websites = await getCollection("websites");
           url={website.data.url}
           id={website.data.id}
         >
-          <Icon name={website.data.id} class="w-16 h-16" />
+          <Icon name={website.data.id} class="w-12 h-12 sm:w-16 sm:h-16" />
         </OverlayItem>
       ))
     }
