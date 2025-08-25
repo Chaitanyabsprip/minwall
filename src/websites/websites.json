@@ -42,6 +42,12 @@
     "icon": "calendar.svg"
   },
   {
+    "label": "Chaitanya S",
+    "id": "chaitanyas",
+    "url": "https://chaitanyas.dev/",
+    "icon": "chaitanyas.svg"
+  },
+  {
     "label": "ChatGPT",
     "id": "chatgpt",
     "url": "https://chat.openai.com/",
